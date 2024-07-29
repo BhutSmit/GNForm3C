@@ -113,7 +113,7 @@ public partial class AdminPanel_Default2 : System.Web.UI.Page
         }
         else
         {
-            lblIncomeCount
+            //lblIncomeCount.Text
         }
 
         #endregion

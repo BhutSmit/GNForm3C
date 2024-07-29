@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Default/MasterPage.master" AutoEventWireup="true" CodeFile="Default2.aspx.cs" Inherits="AdminPanel_Default2" %>
 
-<%@ Register Assembly="System.Web.DataVisualization" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
+
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">

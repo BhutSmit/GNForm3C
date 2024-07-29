@@ -5,9 +5,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphPageHeader" runat="Server">
-    <asp:Label ID="lblPageHeader_XXXXX" runat="server" Text="Ledger"></asp:Label>
+    <asp:Label ID="lblPageHeader_XXXXX" runat="server" Text="Account"></asp:Label>
     <small>
-        <asp:Label ID="lblPageHeaderInfo_XXXXX" runat="server" Text="List"></asp:Label></small>
+        <asp:Label ID="lblPageHeaderInfo_XXXXX" runat="server" Text="Account Ledger"></asp:Label></small>
     <span class="pull-right">
         <small>
             <asp:HyperLink ID="hlShowHelp" SkinID="hlShowHelp" runat="server"></asp:HyperLink>
@@ -21,7 +21,7 @@
         <i class="fa fa-angle-right"></i>
     </li>
     <li class="active">
-        <asp:Label ID="lblBreadCrumbLast" runat="server" Text="Expense"></asp:Label>
+        <asp:Label ID="lblBreadCrumbLast" runat="server" Text="Income/Expence Ledger"></asp:Label>
     </li>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="cphPageContent" runat="Server">
@@ -47,8 +47,8 @@
                 <div class="portlet-body form">
                     <div role="form">
                         <div class="form-body">
-                            <div class="row">
 
+                            <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <div class="input-group date date-picker" data-date-format="dd-mm-yyyy">
@@ -59,7 +59,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <div class="input-group date date-picker" data-date-format="dd-mm-yyyy">
@@ -71,18 +70,18 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="form-actions">
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <asp:Button ID="btnSearch" SkinID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click" />
-                                        <asp:Button ID="btnClear" runat="server" SkinID="btnClear" Text="Clear" OnClick="btnClear_Click" />
-                                    </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <asp:Button ID="btnSearch" SkinID="btnSearch" runat="server" Text="Show" OnClick="btnSearch_Click" />
+                                    <asp:Button ID="btnClear" runat="server" SkinID="btnClear" Text="Clear" OnClick="btnClear_Click" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </ContentTemplate>
     </asp:UpdatePanel>
     <%-- End Search --%>
@@ -108,6 +107,24 @@
                                     <asp:Label ID="lblRecordInfoTop" Text="No entries found" CssClass="pull-right" runat="server"></asp:Label>
                                 </label>
                             </div>
+                            <div class="tools">
+                                <div>
+                                    <%--<asp:HyperLink SkinID="hlAddNew" ID="hlAddNew" NavigateUrl="~/AdminPanel/Account/ACC_Expense/ACC_ExpenseAddEdit.aspx" runat="server"></asp:HyperLink>--%>
+                                    <div class="btn-group" runat="server" id="Div_ExportOption" visible="false">
+                                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                            Export <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li>
+                                                <asp:LinkButton ID="lbtnExportPDF" runat="server" CommandArgument="PDF" OnClick="lbtnExport_Click">PDF</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnExportExcel" runat="server" CommandArgument="Excel" OnClick="lbtnExport_Click">Excel</asp:LinkButton>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="portlet-body">
                             <div class="row" runat="server" id="Div_SearchResult" visible="false">
@@ -123,10 +140,10 @@
                                                     <th class="text-center">
                                                         <asp:Label ID="lbhType" runat="server" Text="Type (Income/Expense)"></asp:Label>
                                                     </th>
-                                                    <th class="text-left">
+                                                    <th class="text-right">
                                                         <asp:Label ID="lbhAmount" runat="server" Text="Amount"></asp:Label>
                                                     </th>
-                                                    <th class="text-right">
+                                                    <th class="text-left">
                                                         <asp:Label ID="lbhNote" runat="server" Text="Note"></asp:Label>
                                                     </th>
                                                 </tr>
@@ -137,23 +154,31 @@
                                                 <asp:Repeater ID="rpData" runat="server" OnItemCommand="rpData_ItemCommand">
                                                     <ItemTemplate>
                                                         <%-- Table Rows --%>
-                                                        <tr class="odd gradeX" style='<%# Eval("LedgerType").ToString() == "Income" ? "background-color: #73BBA3;" : "background-color: #ffaaaa; color: white;" %>' >
-                                                           <td class="text-center">
-                                                                <%#Eval("LedgerDate", GNForm3C.CV.DefaultDateFormatForGrid) %>
+                                                        <tr id="trRow" class="odd gradeX" style="background-color: <%# Eval("LedgerType").ToString() == "Income" ? "lightgreen" : "lightcoral" %>;">
+                                                            <td class="text-center">
+                                                                <%#Convert.ToDateTime(Eval("LedgerDate")).ToString("dd/MM/yyyy") %>
                                                             </td>
-                                                              <td class="text-center">
+                                                            <td class="text-center">
                                                                 <%#Eval("LedgerType") %>
                                                             </td>
                                                             <td class="text-right">
-                                                                <%#Eval("LedgerAmount") %>
+                                                                <%#Eval("LedgerAmount",GNForm3C.CV.DefaultCurrencyFormatWithDecimalPoint) %>
                                                             </td>
                                                             <td class="text-left">
                                                                 <%#Eval("LedgerNote") %>
-                                                            </td>
                                                         </tr>
                                                         <%-- END Table Rows --%>
                                                     </ItemTemplate>
                                                 </asp:Repeater>
+                                                <tr>
+                                                    <td colspan="2" class="text-right">
+                                                        <strong>Total Balance</strong>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblTotalAmount" runat="server" />
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -212,6 +237,8 @@
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="btnSearch" EventName="Click" />
             <asp:AsyncPostBackTrigger ControlID="btnClear" EventName="Click" />
+            <asp:PostBackTrigger ControlID="lbtnExportExcel" />
+            <asp:PostBackTrigger ControlID="lbtnExportPDF" />
         </Triggers>
     </asp:UpdatePanel>
     <%-- END List --%>
@@ -230,11 +257,12 @@
 <asp:Content ID="Content5" ContentPlaceHolderID="cphScripts" runat="Server">
     <script>
 
-       <%-- $(window).keydown(function (e) {
+     <%--   $(window).keydown(function (e) {
             GNWebKeyEvents(e.keyCode, '<%=hlAddNew.ClientID%>', '<%=btnSearch.ClientID%>');
         });--%>
 
         SearchGridUI('<%=btnSearch.ClientID%>', 'sample_1', 1);
+
     </script>
 </asp:Content>
 
