@@ -68,7 +68,7 @@ public partial class AdminPanel_Default2 : System.Web.UI.Page
         Search();
     }
 
-    #endregion 15.1 Button Search Click Event
+    #endregion 15.1 Button Search Click 
 
     #region DropDown Change
     protected void displayChange(object sender, EventArgs e)
@@ -236,6 +236,20 @@ public partial class AdminPanel_Default2 : System.Web.UI.Page
         calendarTable.Rows.Add(totalRow);
 
         return calendarTable;
+    }
+
+    protected void IncomeGrid_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            for (int i = 1; i < e.Row.Cells.Count; i++) // Start from index 1 to skip Date column
+            {
+                if (!string.IsNullOrEmpty(e.Row.Cells[i].Text) && e.Row.Cells[i].Text.ToString() != "₹ 0.00")
+                {
+                    e.Row.Cells[i].CssClass = "bg-success";
+                }
+            }
+        }
     }
 
     private DataTable SummarizeDataByMonth(DataTable dt, string dateColumn, string amountColumn)

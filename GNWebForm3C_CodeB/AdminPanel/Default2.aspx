@@ -168,21 +168,21 @@
                                                                     <div class="table-responsive">
                                                                         <div id="TableContent1">
                                                                             <asp:Label runat="server" ID="lblNoIncomeRecord" Visible="false" Text="No Record Found" CssClass="text-danger"></asp:Label>
-                                                                            <asp:GridView ID="IncomeGrid" runat="server" AutoGenerateColumns="false" CssClass="gridview">
+                                                                            <asp:GridView ID="IncomeGrid" runat="server" AutoGenerateColumns="false" CssClass="gridview" OnRowDataBound="IncomeGrid_RowDataBound">
                                                                                 <Columns>
-                                                                                    <asp:BoundField DataField="Date" HeaderText="Date" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" />
-                                                                                    <asp:BoundField DataField="January" HeaderText="January" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="February" HeaderText="February" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="March" HeaderText="March" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="April" HeaderText="April" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="May" HeaderText="May" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="June" HeaderText="June" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="July" HeaderText="July" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="August" HeaderText="August" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="September" HeaderText="September" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="October" HeaderText="October" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="November" HeaderText="November" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="December" HeaderText="December" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="Date" HeaderText="Date" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+                                                                                    <asp:BoundField DataField="January" HeaderText="January" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="February" HeaderText="February" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="March" HeaderText="March" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="April" HeaderText="April" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="May" HeaderText="May" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="June" HeaderText="June" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="July" HeaderText="July" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="August" HeaderText="August" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="September" HeaderText="September" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="October" HeaderText="October" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="November" HeaderText="November" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="December" HeaderText="December" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
                                                                                 </Columns>
                                                                             </asp:GridView>
                                                                         </div>
@@ -206,21 +206,21 @@
                                                                     <div class="table-responsive">
                                                                         <div id="TableContent1">
                                                                             <asp:Label runat="server" ID="lblNoExpenseRecord" Visible="false" Text="No Record Found" CssClass="text-danger"></asp:Label>
-                                                                            <asp:GridView ID="ExpenseGrid" runat="server" AutoGenerateColumns="false" CssClass="gridview">
+                                                                            <asp:GridView ID="ExpenseGrid" runat="server" AutoGenerateColumns="false" CssClass="gridview" OnRowDataBound="IncomeGrid_RowDataBound">
                                                                                 <Columns>
-                                                                                    <asp:BoundField DataField="Date" HeaderText="Date" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" />
-                                                                                    <asp:BoundField DataField="January" HeaderText="January" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="February" HeaderText="February" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="March" HeaderText="March" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="April" HeaderText="April" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="May" HeaderText="May" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="June" HeaderText="June" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="July" HeaderText="July" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="August" HeaderText="August" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="September" HeaderText="September" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="October" HeaderText="October" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="November" HeaderText="November" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
-                                                                                    <asp:BoundField DataField="December" HeaderText="December" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="Date" HeaderText="Date" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" />
+                                                                                    <asp:BoundField DataField="January" HeaderText="January" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="February" HeaderText="February" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="March" HeaderText="March" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="April" HeaderText="April" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="May" HeaderText="May" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="June" HeaderText="June" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="July" HeaderText="July" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="August" HeaderText="August" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="September" HeaderText="September" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="October" HeaderText="October" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="November" HeaderText="November" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="December" HeaderText="December" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
                                                                                 </Columns>
                                                                             </asp:GridView>
                                                                         </div>
@@ -245,10 +245,10 @@
                                                                             <asp:Label runat="server" ID="lblNoTreatmentSummary" Visible="false" Text="No Record Found" CssClass="text-danger"></asp:Label>
                                                                             <asp:GridView ID="TreatmentSummaryGrid" runat="server" AutoGenerateColumns="false" CssClass="gridview">
                                                                                 <Columns>
-                                                                                    <asp:BoundField DataField="SerialNo" HeaderText="Serial No" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" />
-                                                                                    <asp:BoundField DataField="TreatmentType" HeaderText="TreatmentType" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" />
-                                                                                    <asp:BoundField DataField="PatientsCount" HeaderText="Patients" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" />
-                                                                                    <asp:BoundField DataField="IncomesAmount" HeaderText="Amount" HeaderStyle-CssClass="gridview-header" ItemStyle-CssClass="gridview-cell" DataFormatString="{0:C}" />
+                                                                                    <asp:BoundField DataField="SerialNo" HeaderText="Serial No" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" />
+                                                                                    <asp:BoundField DataField="TreatmentType" HeaderText="TreatmentType" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" />
+                                                                                    <asp:BoundField DataField="PatientsCount" HeaderText="Patients" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" />
+                                                                                    <asp:BoundField DataField="IncomesAmount" HeaderText="Amount" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-right" DataFormatString="{0:C}" />
                                                                                 </Columns>
                                                                             </asp:GridView>
                                                                         </div>
