@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphPageHeader" runat="Server">
-    <asp:Label ID="lblPageHeader_XXXXX" runat="server" Text="Hospital"></asp:Label>
+    <asp:Label ID="lblPageHeader_XXXXX" runat="server" Text="Student"></asp:Label>
     <small>
         <asp:Label ID="lblPageHeaderInfo_XXXXX" runat="server" Text="Master"></asp:Label></small>
     <span class="pull-right">
@@ -19,7 +19,7 @@
         <i class="fa fa-angle-right"></i>
     </li>
     <li class="active">
-        <asp:Label ID="lblBreadCrumbLast" runat="server" Text="Hospital"></asp:Label>
+        <asp:Label ID="lblBreadCrumbLast" runat="server" Text="Student"></asp:Label>
     </li>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="cphPageContent" runat="Server">
@@ -72,7 +72,9 @@
                                             <span class="input-group-addon">
                                                 <i class="fa fa-search"></i>
                                             </span>
-                                            <asp:TextBox ID="txtCurrentSem" CssClass="form-control" runat="server" PlaceHolder="Enter Current Semester"></asp:TextBox>
+                                            <asp:DropDownList ID="ddlCurrentSem" CssClass="form-control select2me" runat="server">
+                                                
+                                            </asp:DropDownList>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +106,9 @@
                                             <span class="input-group-addon">
                                                 <i class="fa fa-search"></i>
                                             </span>
-                                            <asp:TextBox ID="txtGender" CssClass="form-control" runat="server" PlaceHolder="Enter Gender"></asp:TextBox>
+                                            <asp:DropDownList ID="ddlGender" CssClass="form-control select2me" runat="server">
+                                               
+                                            </asp:DropDownList>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +154,7 @@
     <%-- List --%>
     <asp:UpdatePanel ID="upList" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <div class="row">
+             <div class="row">
                 <div class="col-md-12">
                     <ucMessage:ShowMessage ID="ucMessage" runat="server" ViewStateMode="Disabled" />
                 </div>
@@ -170,7 +174,7 @@
                             </div>
                             <div class="tools">
                                 <div>
-                                    <asp:HyperLink SkinID="hlAddNew" ID="hlAddNew" NavigateUrl="~/AdminPanel/Master/MST_Hospital/MST_HospitalAddEdit.aspx" runat="server"></asp:HyperLink>
+                                    <asp:HyperLink SkinID="hlAddNew" ID="hlAddNew" NavigateUrl="~/AdminPanel/Master/MST_Student/MST_StudentAddEdit.aspx" runat="server"></asp:HyperLink>
                                     <div class="btn-group" runat="server" id="Div_ExportOption" visible="false">
                                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                                             Export <i class="fa fa-angle-down"></i>
@@ -196,29 +200,35 @@
                                             <thead>
                                                 <tr class="TRDark">
                                                     <th>
-                                                        <asp:Label ID="lbhHospital" runat="server" Text="Hospital"></asp:Label>
+                                                        <asp:Label ID="lbhStudentName" runat="server" Text="Student Name"></asp:Label>
                                                     </th>
                                                     <th>
-                                                        <asp:Label ID="lbhPrintName" runat="server" Text="Print Name"></asp:Label>
+                                                        <asp:Label ID="lbhEnrollmentNo" runat="server" Text="EnrollmentNo"></asp:Label>
                                                     </th>
                                                     <th>
-                                                        <asp:Label ID="lbhPrintLine1" runat="server" Text="Print Line1"></asp:Label>
+                                                        <asp:Label ID="lbhRollNo" runat="server" Text="RollNo"></asp:Label>
+                                                    </th>
+
+                                                    <th>
+                                                        <asp:Label ID="lbhCurrentSem" runat="server" Text="Current sem"></asp:Label>
                                                     </th>
                                                     <th>
-                                                        <asp:Label ID="lbhPrintLine2" runat="server" Text="Print Line2"></asp:Label>
+                                                        <asp:Label ID="lbhEmailInstitute" runat="server" Text=" Institute Email"></asp:Label>
                                                     </th>
                                                     <th>
-                                                        <asp:Label ID="lbhPrintLine3" runat="server" Text="Print Line3"></asp:Label>
+                                                        <asp:Label ID="lbhEmailPersonal" runat="server" Text="Persnol Email"></asp:Label>
                                                     </th>
                                                     <th>
-                                                        <asp:Label ID="lbhFooterName" runat="server" Text="Footer Name"></asp:Label>
+                                                        <asp:Label ID="lbhBirthDate" runat="server" Text="BirthDate"></asp:Label>
                                                     </th>
                                                     <th>
-                                                        <asp:Label ID="lbhReportHeaderName" runat="server" Text="Report Header Name"></asp:Label>
+                                                        <asp:Label ID="lbhContactNo" runat="server" Text="ContactNo"></asp:Label>
                                                     </th>
                                                     <th>
-                                                        <asp:Label ID="lblCount" runat="server" Text="ExpenseType Count"></asp:Label>
+                                                        <asp:Label ID="lbhGender" runat="server" Text="Gender"></asp:Label>
                                                     </th>
+                                                   
+
                                                     <th class="nosortsearch text-nowrap text-center">
                                                         <asp:Label ID="lbhAction" runat="server" Text="Action"></asp:Label>
                                                     </th>
@@ -232,38 +242,42 @@
                                                         <%-- Table Rows --%>
                                                         <tr class="odd gradeX">
                                                             <td>
-                                                                <asp:HyperLink ID="hlViewHospitalID" NavigateUrl='<%# "~/AdminPanel/Master/MST_Hospital/MST_HospitalView.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' data-target="#viewiFrameReg" CssClass="modalButton" data-toggle="modal" runat="server"><%#Eval("Hospital") %></asp:HyperLink>
+                                                                <asp:HyperLink ID="hlViewStudentID" NavigateUrl='<%# "~/AdminPanel/Master/MST_Student/MST_StudentView.aspx?StudentID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("StudentID").ToString()) %>' data-target="#viewiFrameReg" CssClass="modalButton" data-toggle="modal" runat="server"><%#Eval("StudentName") %></asp:HyperLink>
+                                                            </td>
+                                                            
+                                                            <td>
+                                                                <%#Eval("Enrollment") %>
                                                             </td>
                                                             <td>
-                                                                <%#Eval("PrintName") %>
+                                                                <%#Eval("RollNo") %>
                                                             </td>
                                                             <td>
-                                                                <%#Eval("PrintLine1") %>
+                                                                <%#Eval("CurrentSem") %>
                                                             </td>
                                                             <td>
-                                                                <%#Eval("PrintLine2") %>
+                                                                <%#Eval("EmailInstitude") %>
                                                             </td>
                                                             <td>
-                                                                <%#Eval("PrintLine3") %>
+                                                                <%#Eval("EmailPersonal") %>
                                                             </td>
                                                             <td>
-                                                                <%#Eval("FooterName") %>
+                                                                <%#Eval("BirthDate") %>
                                                             </td>
                                                             <td>
-                                                                <%#Eval("ReportHeaderName") %>
+                                                                <%#Eval("ContactNo") %>
                                                             </td>
-                                                            <td class="text-center">
-                                                                <asp:HyperLink ID="hlExpCount" SkinID="hlGreen_Grid" NavigateUrl='<%# "~/AdminPanel/Master/MST_ExpenseType/MST_ExpenseTypeList.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' Text='<%#Eval("ExpenseTypeCount") %>' runat="server"></asp:HyperLink>
-                                                                <asp:HyperLink ID="hlExpCountEdit" SkinID="Edit" NavigateUrl='<%# "~/AdminPanel/Master/MST_ExpenseType/MST_ExpenseTypeAddEditMany.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' runat="server"></asp:HyperLink>
+                                                            <td>
+                                                                <%#Eval("Gender") %>
                                                             </td>
+                                                            
                                                             <td class="text-nowrap text-center">
-                                                                <asp:HyperLink ID="hlView" SkinID="View" NavigateUrl='<%# "~/AdminPanel/Master/MST_Hospital/MST_HospitalView.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' data-target="#viewiFrameReg" data-toggle="modal" runat="server"></asp:HyperLink>
-                                                                <asp:HyperLink ID="hlEdit" SkinID="Edit" NavigateUrl='<%# "~/AdminPanel/Master/MST_Hospital/MST_HospitalAddEdit.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' runat="server"></asp:HyperLink>
+                                                                <asp:HyperLink ID="hlView" SkinID="View" NavigateUrl='<%# "~/AdminPanel/Master/MST_Student/MST_StudentView.aspx?StudentID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("StudentID").ToString()) %>' data-target="#viewiFrameReg" data-toggle="modal" runat="server"></asp:HyperLink>
+                                                                <asp:HyperLink ID="hlEdit" SkinID="Edit" NavigateUrl='<%# "~/AdminPanel/Master/MST_Student/MST_StudentAddEdit.aspx?StudentID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("StudentID").ToString()) %>' runat="server"></asp:HyperLink>
                                                                 <asp:LinkButton ID="lbtnDelete" runat="server"
                                                                     SkinID="Delete"
                                                                     OnClientClick="javascript:return confirm('Are you sure you want to delete record ? ');"
                                                                     CommandName="DeleteRecord"
-                                                                    CommandArgument='<%#Eval("HospitalID") %>'>
+                                                                    CommandArgument='<%#Eval("StudentID") %>'>
                                                                 </asp:LinkButton>
                                                             </td>
                                                         </tr>

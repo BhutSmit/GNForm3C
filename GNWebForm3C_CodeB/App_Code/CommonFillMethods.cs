@@ -143,5 +143,24 @@ namespace GNForm3C
             ddl.DataBind();
             ddl.Items.Insert(0, new ListItem("Select User", "-99"));
         }
+        public static void FillDropDownListGender(DropDownList ddl)
+        {
+            ddl.Items.Insert(0, new ListItem("Select Gender", "-99"));
+            ddl.Items.Add(new ListItem("Male", "Male"));
+            ddl.Items.Add(new ListItem("Female", "Female"));
+            ddl.Items.Add(new ListItem("Other", "Other"));
+        }
+        public static void FillDropDownListCurrentSem(DropDownList ddl)
+        {
+            ddl.Items.Insert(0, new ListItem("Select Semester", "-99"));
+            ddl.Items.Add(new ListItem("1", "1"));
+            ddl.Items.Add(new ListItem("2", "2"));
+            ddl.Items.Add(new ListItem("3", "3"));
+            ddl.Items.Add(new ListItem("4", "4"));
+            ddl.Items.Add(new ListItem("5", "5"));
+            ddl.Items.Add(new ListItem("6", "6"));
+            ddl.Items.Add(new ListItem("7", "7"));
+            ddl.Items.Add(new ListItem("8", "8"));
+        }
     }
 }

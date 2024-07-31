@@ -53,7 +53,7 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
             #endregion 12.2 Set Default Value
 
             #region 12.3 Set Help Text
-            ucHelp.ShowHelp("Help Text will be shown here");
+            //ucHelp.ShowHelp("Help Text will be shown here");
             #endregion 12.3 Set Help Text
         }
     }
@@ -77,6 +77,9 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
 
         CommonFunctions.GetDropDownPageSize(ddlPageSizeBottom);
         ddlPageSizeBottom.SelectedValue = PageRecordSize.ToString();
+
+        CommonFillMethods.FillDropDownListGender(ddlGender);
+        CommonFillMethods.FillDropDownListCurrentSem(ddlCurrentSem);
     }
 
     #endregion 14.1 Fill DropDownList   
@@ -127,8 +130,8 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
         if (txtEnrollment.Text.Trim() != String.Empty)
             Enrollment = txtEnrollment.Text.Trim();
 
-        if (txtCurrentSem.Text.Trim() != String.Empty)
-            CurrentSem = Convert.ToInt32(txtCurrentSem.Text);
+        if (ddlCurrentSem.SelectedIndex > 0)
+            CurrentSem = Convert.ToInt32(ddlCurrentSem.SelectedValue);
 
         if (txtEmailInsti.Text.Trim() != String.Empty)
             EmailInstitude = txtEmailInsti.Text.Trim();
@@ -139,8 +142,8 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
         if (txtContactNo.Text.Trim() != String.Empty)
             ContactNo = txtContactNo.Text.Trim();
 
-        if (txtGender.Text.Trim() != String.Empty)
-            Gender = txtGender.Text.Trim();
+        if (ddlGender.SelectedIndex > 0)
+            Gender = ddlGender.SelectedValue.ToString();
 
         if (txtRollNo.Text.Trim() != String.Empty)
             RollNo = Convert.ToInt32(txtRollNo.Text);
@@ -150,7 +153,7 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
 
         MST_StudentBAL bal_MST_Student = new MST_StudentBAL();
 
-        DataTable dt = bal_MST_Student.SelectPage(Offset, PageRecordSize, out TotalRecords, StudentName, Enrollment, RollNo, CurrentSem, EmailInstitude, EmailPersonal, Gender, 1);
+        DataTable dt = bal_MST_Student.SelectPage(Offset, PageRecordSize, out TotalRecords, StudentName, Enrollment, RollNo, CurrentSem, EmailInstitude, EmailPersonal, Gender, Convert.ToInt32(Session["UserID"]));
 
         if (PageRecordSize == 0 && dt.Rows.Count > 0)
         {
@@ -167,17 +170,6 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
             rpData.DataSource = dt;
             rpData.DataBind();
 
-            foreach (RepeaterItem rpcount in rpData.Items)
-            {
-                HyperLink hlExpCount = (HyperLink)rpcount.FindControl("hlExpCount");
-                HyperLink hlExpCountEdit = (HyperLink)rpcount.FindControl("hlExpCountEdit");
-                if (hlExpCount.Text.Trim() == "0")
-                {
-                    hlExpCount.NavigateUrl = null;
-                    hlExpCountEdit.Visible = false;
-                }
-
-            }
 
             if (PageNo > TotalPages)
                 PageNo = TotalPages;
@@ -242,10 +234,10 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
         {
             try
             {
-                MST_HospitalBAL balMST_Hospital = new MST_HospitalBAL();
+                MST_StudentBAL bal_MST_Student = new MST_StudentBAL();
                 if (e.CommandArgument.ToString().Trim() != "")
                 {
-                    if (balMST_Hospital.Delete(Convert.ToInt32(e.CommandArgument)))
+                    if (bal_MST_Student.Delete(Convert.ToInt32(e.CommandArgument)))
                     {
                         ucMessage.ShowSuccess(CommonMessage.DeletedRecord());
 
@@ -374,8 +366,8 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
         if (txtEnrollment.Text.Trim() != String.Empty)
             Enrollment = txtEnrollment.Text.Trim();
 
-        if (txtCurrentSem.Text.Trim() != String.Empty)
-            CurrentSem = Convert.ToInt32(txtCurrentSem.Text);
+        if (ddlCurrentSem.SelectedIndex > 0)
+            CurrentSem = Convert.ToInt32(ddlCurrentSem.SelectedValue);
 
         if (txtEmailInsti.Text.Trim() != String.Empty)
             EmailInstitude = txtEmailInsti.Text.Trim();
@@ -386,8 +378,8 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
         if (txtContactNo.Text.Trim() != String.Empty)
             ContactNo = txtContactNo.Text.Trim();
 
-        if (txtGender.Text.Trim() != String.Empty)
-            Gender = txtGender.Text.Trim();
+        if (ddlGender.Text.Trim() != String.Empty)
+            Gender = ddlGender.Text.Trim();
 
         if (txtRollNo.Text.Trim() != String.Empty)
             RollNo = Convert.ToInt32(txtRollNo.Text);
@@ -400,7 +392,7 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
 
         MST_StudentBAL bal_MST_Student = new MST_StudentBAL();
 
-        DataTable dt_MST_Student = bal_MST_Student.SelectPage(Offset, PageRecordSize, out TotalRecords, StudentName, Enrollment, RollNo, CurrentSem, EmailInstitude, EmailPersonal, Gender, 1);
+        DataTable dt_MST_Student = bal_MST_Student.SelectPage(Offset, PageRecordSize, out TotalRecords, StudentName, Enrollment, RollNo, CurrentSem, EmailInstitude, EmailPersonal, Gender, Convert.ToInt32(Session["UserID"]));
         if (dt_MST_Student != null && dt_MST_Student.Rows.Count > 0)
         {
             Session["ExportTable"] = dt_MST_Student;
@@ -443,10 +435,10 @@ public partial class AdminPanel_Master_MST_Student_MST_StudentList : System.Web.
     {
         txtStudentName.Text = String.Empty;
         txtEnrollment.Text = String.Empty;
-        txtCurrentSem.Text = String.Empty;
+        ddlCurrentSem.SelectedIndex = 0;
         txtEmailInsti.Text = String.Empty;
         txtEmailPersonal.Text = String.Empty;
-        txtGender.Text = String.Empty;
+        ddlGender.SelectedIndex = 0;
         txtRollNo.Text = String.Empty;
         txtContactNo.Text = String.Empty;
         CommonFunctions.BindEmptyRepeater(rpData);
