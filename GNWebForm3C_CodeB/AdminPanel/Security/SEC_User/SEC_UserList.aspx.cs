@@ -40,6 +40,8 @@ public partial class AdminPanel_SEC_User_SEC_UserList : System.Web.UI.Page
             FillDropDownList();
 
             #endregion 12.1 DropDown List Fill Section
+
+            Search(1);
 			
 			#region 12.2 Set Default Value
             

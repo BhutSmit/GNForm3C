@@ -46,8 +46,10 @@ public partial class AdminPanel_CFG_SoftwareConfiguration_CFG_SoftwareConfigurat
             lblSearchHeader.Text = CV.SearchHeaderText;
             lblSearchResultHeader.Text = CV.SearchResultHeaderText;
             upr.DisplayAfter = CV.UpdateProgressDisplayAfter;
-			
+
             #endregion 12.2 Set Default Value
+
+            Search(1);
 
 	    #region 12.3 Set Help Text
             ucHelp.ShowHelp("Help Text will be shown here");
