@@ -115,6 +115,13 @@ public partial class AdminPanel_ACC_Expense_ACC_ExpenseList : System.Web.UI.Page
 
         #endregion Parameters
 
+        if (Request.QueryString["HospitalID"] != null)
+        {
+            HospitalID = Convert.ToInt32(GNForm3C.CommonFunctions.DecryptBase64(Request.QueryString["HospitalID"]));
+            ddlHospitalID.SelectedIndex = Convert.ToInt32(HospitalID.ToString());
+
+        }
+
         #region Gather Data
 
         if (ddlExpenseTypeID.SelectedIndex > 0)

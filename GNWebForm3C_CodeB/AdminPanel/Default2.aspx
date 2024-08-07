@@ -257,6 +257,14 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h2>Income Chart</h2>
+                                                            <canvas id="incomeChart"></canvas>
+                                                            <h2>Expense Chart</h2>
+                                                            <canvas id="expenseChart"></canvas>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -279,7 +287,7 @@
     </asp:UpdatePanel>
     <%-- END Dashboard--%>
 
-   
+
 
     <%-- Loading  --%>
     <asp:UpdateProgress ID="upr" runat="server">
@@ -293,5 +301,71 @@
     <%-- END Loading  --%>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="cphScripts" runat="Server">
-</asp:Content>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function createCharts() {
+            var incomeData = <%= GetIncomeDataJson() %>;
+             var expenseData = <%= GetExpenseDataJson() %>;
 
+            var ctxIncome = document.getElementById('incomeChart');
+            if (ctxIncome) {
+                var incomeChart = new Chart(ctxIncome.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: incomeData.labels,
+                        datasets: [{
+                            label: 'Total Income',
+                            data: incomeData.values,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.error("Canvas element for incomeChart not found.");
+            }
+
+            var ctxExpense = document.getElementById('expenseChart');
+            if (ctxExpense) {
+                var expenseChart = new Chart(ctxExpense.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: expenseData.labels,
+                        datasets: [{
+                            label: 'Total Expense',
+                            data: expenseData.values,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.error("Canvas element for expenseChart not found.");
+            }
+        }
+
+        // Call createCharts after the UpdatePanel is updated
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(createCharts);
+
+
+        window.onload = function () {
+            createCharts();
+        };
+    </script>
+</asp:Content>

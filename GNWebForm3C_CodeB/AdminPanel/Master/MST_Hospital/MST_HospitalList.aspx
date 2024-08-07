@@ -218,6 +218,9 @@
                                                     <th>
                                                         <asp:Label ID="lblCount" runat="server" Text="ExpenseType Count"></asp:Label>
                                                     </th>
+                                                    <th>
+                                                        <asp:Label ID="Label1" runat="server" Text="Treatment Count"></asp:Label>
+                                                    </th>
                                                     <th class="nosortsearch text-nowrap text-center">
                                                         <asp:Label ID="lbhAction" runat="server" Text="Action"></asp:Label>
                                                     </th>
@@ -254,6 +257,9 @@
                                                             <td class="text-center">
                                                                 <asp:HyperLink ID="hlExpCount" SkinID="hlGreen_Grid" NavigateUrl='<%# "~/AdminPanel/Master/MST_ExpenseType/MST_ExpenseTypeList.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' Text='<%#Eval("ExpenseTypeCount") %>' runat="server"></asp:HyperLink>
                                                                 <asp:HyperLink ID="hlExpCountEdit" SkinID="Edit" NavigateUrl='<%# "~/AdminPanel/Master/MST_ExpenseType/MST_ExpenseTypeAddEditMany.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' runat="server"></asp:HyperLink>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <asp:HyperLink ID="HyperLink1" SkinID="hlGreen_Grid" NavigateUrl='<%# "~/AdminPanel/Master/MST_Treatment/MST_TreatmentList.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' Text='<%#Eval("TreatmentCount") %>' runat="server"></asp:HyperLink>
                                                             </td>
                                                             <td class="text-nowrap text-center">
                                                                 <asp:HyperLink ID="hlView" SkinID="View" NavigateUrl='<%# "~/AdminPanel/Master/MST_Hospital/MST_HospitalView.aspx?HospitalID=" + GNForm3C.CommonFunctions.EncryptBase64(Eval("HospitalID").ToString()) %>' data-target="#viewiFrameReg" data-toggle="modal" runat="server"></asp:HyperLink>

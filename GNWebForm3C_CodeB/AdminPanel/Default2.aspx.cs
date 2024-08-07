@@ -10,6 +10,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text.Json;
+using System.Web.Script.Serialization;
 
 public partial class AdminPanel_Default2 : System.Web.UI.Page
 {
@@ -252,20 +254,108 @@ public partial class AdminPanel_Default2 : System.Web.UI.Page
         }
     }
 
-    private DataTable SummarizeDataByMonth(DataTable dt, string dateColumn, string amountColumn)
+    //private DataTable SummarizeDataByMonth(DataTable dt, string dateColumn, string amountColumn)
+    //{
+    //    DataTable summaryTable = new DataTable();
+    //    summaryTable.Columns.Add("Month", typeof(string));
+    //    summaryTable.Columns.Add("Total", typeof(decimal));
+
+    //    for (int month = 1; month <= 12; month++)
+    //    {
+    //        DataRow row = summaryTable.NewRow();
+    //        row["Month"] = new DateTime(2024, month, 1).ToString("MMMM");
+    //        row["Total"] = dt.AsEnumerable()
+    //                         .Where(r => ((DateTime)r[dateColumn]).Month == month)
+    //                         .Sum(r => (decimal)r[amountColumn]);
+    //        summaryTable.Rows.Add(row);
+    //    }
+
+    //    return summaryTable;
+    //}
+
+    public string GetIncomeDataJson()
     {
+        DataTable incomeData = GetIncomeData();
+        DataTable incomeSummary = SummarizeDataByMonth(incomeData, "IncomeDate", "Amount", "TotalIncome");
+
+        var result = new
+        {
+            labels = incomeSummary.AsEnumerable().Select(row => row.Field<string>("Month")).ToArray(),
+            values = incomeSummary.AsEnumerable().Select(row => row.Field<decimal>("TotalIncome")).ToArray()
+        };
+
+        return new JavaScriptSerializer().Serialize(result);
+    }
+
+    public string GetExpenseDataJson()
+    {
+        DataTable expenseData = GetExpenseData();
+        DataTable expenseSummary = SummarizeDataByMonth(expenseData, "ExpenseDate", "Amount", "TotalExpense");
+
+        var result = new
+        {
+            labels = expenseSummary.AsEnumerable().Select(row => row.Field<string>("Month")).ToArray(),
+            values = expenseSummary.AsEnumerable().Select(row => row.Field<decimal>("TotalExpense")).ToArray()
+        };
+
+        return new JavaScriptSerializer().Serialize(result);
+    }
+
+    private DataTable GetIncomeData()
+    {
+        DataTable dt = new DataTable();
+        dt.Columns.Add("IncomeID", typeof(int));
+        dt.Columns.Add("Amount", typeof(decimal));
+        dt.Columns.Add("IncomeDate", typeof(DateTime));
+
+        dt.Rows.Add(1, 100m, new DateTime(2023, 1, 15));
+        dt.Rows.Add(2, 200m, new DateTime(2023, 2, 10));
+        dt.Rows.Add(3, 300m, new DateTime(2023, 1, 25));
+        dt.Rows.Add(4, 400m, new DateTime(2023, 3, 5));
+
+        return dt;
+    }
+
+    private DataTable GetExpenseData()
+    {
+        DataTable dt = new DataTable();
+        dt.Columns.Add("ExpenseID", typeof(int));
+        dt.Columns.Add("Amount", typeof(decimal));
+        dt.Columns.Add("ExpenseDate", typeof(DateTime));
+
+        dt.Rows.Add(1, 150m, new DateTime(2023, 1, 10));
+        dt.Rows.Add(2, 250m, new DateTime(2023, 2, 15));
+        dt.Rows.Add(3, 350m, new DateTime(2023, 1, 20));
+        dt.Rows.Add(4, 450m, new DateTime(2023, 3, 7));
+
+        return dt;
+    }
+
+    private DataTable SummarizeDataByMonth(DataTable dt, string dateColumn, string amountColumn, string totalColumn)
+    {
+
         DataTable summaryTable = new DataTable();
         summaryTable.Columns.Add("Month", typeof(string));
-        summaryTable.Columns.Add("Total", typeof(decimal));
+        summaryTable.Columns.Add(totalColumn, typeof(decimal));
 
-        for (int month = 1; month <= 12; month++)
+        string[] months = new[] { "January", "February", "March", "April", "May", "June",
+                                   "July", "August", "September", "October", "November", "December" };
+        foreach (string month in months)
         {
-            DataRow row = summaryTable.NewRow();
-            row["Month"] = new DateTime(2024, month, 1).ToString("MMMM");
-            row["Total"] = dt.AsEnumerable()
-                             .Where(r => ((DateTime)r[dateColumn]).Month == month)
-                             .Sum(r => (decimal)r[amountColumn]);
-            summaryTable.Rows.Add(row);
+            summaryTable.Rows.Add(month, 0m);
+        }
+
+        foreach (DataRow row in dt.Rows)
+        {
+            DateTime date = (DateTime)row[dateColumn];
+            decimal amount = (decimal)row[amountColumn];
+            string month = date.ToString("MMMM");
+
+            DataRow[] monthRows = summaryTable.Select("Month = '" + month + "'");
+            if (monthRows.Length > 0)
+            {
+                monthRows[0][totalColumn] = (decimal)monthRows[0][totalColumn] + amount;
+            }
         }
 
         return summaryTable;

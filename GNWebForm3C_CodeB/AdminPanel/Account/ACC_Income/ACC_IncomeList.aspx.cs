@@ -134,6 +134,30 @@ public partial class AdminPanel_ACC_Income_ACC_IncomeList : System.Web.UI.Page
 
         #endregion Gather Data
 
+        #region NavigateLogic
+        if (Request.QueryString["HospitalID"] != null)
+        {
+            if (!Page.IsPostBack)
+            {
+                HospitalID = CommonFunctions.DecryptBase64Int32(Request.QueryString["HospitalID"]);
+                ddlHospitalID.SelectedIndex = Convert.ToInt32(HospitalID.ToString());
+            }
+            else
+            {
+
+                if (ddlHospitalID.SelectedIndex > 0)
+                    HospitalID = Convert.ToInt32(ddlHospitalID.SelectedValue);
+            }
+        }
+        else
+        {
+            
+
+            if (ddlHospitalID.SelectedIndex > 0)
+                HospitalID = Convert.ToInt32(ddlHospitalID.SelectedValue);
+        }
+        #endregion NavigateLogic
+
         ACC_IncomeBAL balACC_Income = new ACC_IncomeBAL();
 
         DataTable dt = balACC_Income.SelectPage(Offset, PageRecordSize, out TotalRecords, IncomeTypeID, Amount, IncomeDate, HospitalID, FinYearID);
@@ -152,6 +176,12 @@ public partial class AdminPanel_ACC_Income_ACC_IncomeList : System.Web.UI.Page
 			Div_ExportOption.Visible = true;
             rpData.DataSource = dt;
             rpData.DataBind();
+
+            if (Request.QueryString["HospitalID"] != null)
+       {
+           HospitalID = CommonFunctions.DecryptBase64Int32(Request.QueryString["HospitalID"]);
+           ddlHospitalID.SelectedIndex = Convert.ToInt32(HospitalID.ToString());
+       }
 
             if (PageNo > TotalPages)            
                 PageNo = TotalPages;

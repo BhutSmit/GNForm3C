@@ -239,6 +239,17 @@ namespace GNForm3C
             }
         }
 
+        public static List<String> ColumnOfDataTable(DataTable dt)
+        {
+            var columnNames = new List<string>();
+            foreach (DataColumn column in dt.Columns)
+            {
+                columnNames.Add(column.ColumnName);
+            }
+
+            return columnNames;
+        }
+
         public static void BindPage(int FirstPage, int LastPage, Repeater rp)
         {
             DataTable dtPageNo = new DataTable();

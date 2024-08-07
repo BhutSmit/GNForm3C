@@ -187,7 +187,3 @@ namespace GNForm3C.ENT
         #endregion
     }
 }
-//public class MST_StudemtENTBase
-//{
-    
-//}

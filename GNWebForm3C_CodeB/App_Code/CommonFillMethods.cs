@@ -162,5 +162,35 @@ namespace GNForm3C
             ddl.Items.Add(new ListItem("7", "7"));
             ddl.Items.Add(new ListItem("8", "8"));
         }
+
+        public static void FillDropDownListIncomeTypeIDByHospitalID(DropDownList ddl, SqlInt32 HospitalID)
+        {
+            MST_IncomeTypeBAL balMST_IncomeType = new MST_IncomeTypeBAL();
+            ddl.DataSource = balMST_IncomeType.SelectComboBoxByHospitalID(HospitalID);
+            ddl.DataValueField = "IncomeTypeID";
+            ddl.DataTextField = "IncomeType";
+            ddl.DataBind();
+            ddl.Items.Insert(0, new ListItem("Select Income Type", "-99"));
+        }
+
+        public static void FillDropDownListPatientID(DropDownList ddl)
+        {
+            ACC_GNTransactionBAL balMST_Patient = new ACC_GNTransactionBAL();
+            ddl.DataSource = balMST_Patient.SelectComboBox();
+            ddl.DataValueField = "PatientID";
+            ddl.DataTextField = "Patient";
+            ddl.DataBind();
+            ddl.Items.Insert(0, new ListItem("Select Treatment", "-99"));
+        }
+
+        public static void FillDropDownListTreatmentIDByHospitalID(DropDownList ddl, SqlInt32 HospitalID)
+        {
+            MST_TreatmentBAL balMST_Treatment = new MST_TreatmentBAL();
+            ddl.DataSource = balMST_Treatment.SelectComboBoxByHospitalID(HospitalID);
+            ddl.DataValueField = "TreatmentID";
+            ddl.DataTextField = "Treatment";
+            ddl.DataBind();
+            ddl.Items.Insert(0, new ListItem("Select Treatment", "-99"));
+        }
     }
 }

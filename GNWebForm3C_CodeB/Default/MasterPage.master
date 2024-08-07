@@ -349,6 +349,11 @@
                                             <span class="title">Student</span>
                                         </a>
                                     </li>
+                                    <li class="nav-item  ">
+                                        <a href='<%=ResolveClientUrl("~/AdminPanel/Master/MST_BranchIntake/MST_BranchIntake.aspx") %>' class="nav-link ">
+                                            <span class="title">Branch</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -376,6 +381,11 @@
                                     <li class="nav-item  ">
                                         <a href='<%=ResolveClientUrl("~/AdminPanel/Account/ACC_TransactionTran/ACC_TransactionTranList.aspx") %>' class="nav-link ">
                                             <span class="title">Account TransactionTran</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item  ">
+                                        <a href='<%=ResolveClientUrl("~/AdminPanel/Account/ACC_GNTransaction/ACC_GNTransaction.aspx") %>' class="nav-link ">
+                                            <span class="title">Transaction</span>
                                         </a>
                                     </li>
                                 </ul>

@@ -147,10 +147,10 @@ namespace GNForm3C.BAL
 
 		#endregion SelectOperation
 
-		public DataTable SelectShow(SqlInt32 FinYearID, SqlInt32 HospitalID, SqlInt32 IncomeTypeID)
+		public DataTable SelectShow(SqlInt32 HospitalID)
 		{
 			ACC_IncomeDAL dal_Acc_Income = new ACC_IncomeDAL();
-			DataTable dt = dal_Acc_Income.SelectShow(FinYearID, HospitalID, IncomeTypeID);
+			DataTable dt = dal_Acc_Income.SelectShow(HospitalID);
 			return dt;
 		}
 

@@ -121,6 +121,13 @@ public partial class AdminPanel_MST_Treatment_MST_TreatmentList : System.Web.UI.
 
         #endregion Gather Data
 
+        if (Request.QueryString["HospitalID"] != null)
+        {
+            HospitalID = Convert.ToInt32(GNForm3C.CommonFunctions.DecryptBase64(Request.QueryString["HospitalID"]));
+            ddlHospitalID.SelectedIndex = Convert.ToInt32(HospitalID.ToString());
+
+        }
+
         MST_TreatmentBAL balMST_Treatment = new MST_TreatmentBAL();
 
         DataTable dt = balMST_Treatment.SelectPage(Offset, PageRecordSize, out TotalRecords, Treatment, HospitalID);
