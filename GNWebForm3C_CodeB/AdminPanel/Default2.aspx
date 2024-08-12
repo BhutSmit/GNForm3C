@@ -257,12 +257,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <h2>Income Chart</h2>
-                                                            <canvas id="incomeChart"></canvas>
-                                                            <h2>Expense Chart</h2>
-                                                            <canvas id="expenseChart"></canvas>
+                                                    <div class="bg-white p-4 border">
+                                                        <div class="container row">
+                                                            <div class="col-md-6">
+                                                                <h2>Income Chart</h2>
+                                                                <canvas id="incomeChart"></canvas>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <h2>Expense Chart</h2>
+                                                                <canvas id="expenseChart"></canvas>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -303,9 +307,9 @@
 <asp:Content ID="Content5" ContentPlaceHolderID="cphScripts" runat="Server">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        function createCharts() {
+        <%--function createCharts() {
             var incomeData = <%= GetIncomeDataJson() %>;
-             var expenseData = <%= GetExpenseDataJson() %>;
+            var expenseData = <%= GetExpenseDataJson() %>;
 
             var ctxIncome = document.getElementById('incomeChart');
             if (ctxIncome) {
@@ -363,9 +367,60 @@
         // Call createCharts after the UpdatePanel is updated
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(createCharts);
 
+        //document.getElementById("btnShow").onlick = function () {
+        //    alert("Hello")
+        //}
+
 
         window.onload = function () {
             createCharts();
+        };--%>
+
+        window.onload = function () {
+            function IncomeChart(incomeData) {
+                if (typeof incomeData === "object") {
+
+                    alert("object");
+                }
+                alert(typeof incomeData);
+                console.log("===========================");
+                console.log(incomeData)
+                // Income Chart
+                var labels = incomeData.labels;
+                var values = incomeData.values;
+
+                console.log("Label : " + incomeData); // Corrected from lables to labels
+
+                var ctxIncome = document.getElementById('incomeChart');
+                if (ctxIncome) {
+                    var incomeChart = new Chart(ctxIncome.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Total Income',
+                                data: values,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    console.error("Canvas element for incomeChart not found.");
+                }
+            }
+
+            // Assuming incomeData is defined globally or passed from the server
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(IncomeChart);
         };
+
     </script>
 </asp:Content>

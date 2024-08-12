@@ -180,7 +180,7 @@ namespace GNForm3C
             ddl.DataValueField = "PatientID";
             ddl.DataTextField = "Patient";
             ddl.DataBind();
-            ddl.Items.Insert(0, new ListItem("Select Treatment", "-99"));
+            ddl.Items.Insert(0, new ListItem("Select Patient Name", "-99"));
         }
 
         public static void FillDropDownListTreatmentIDByHospitalID(DropDownList ddl, SqlInt32 HospitalID)

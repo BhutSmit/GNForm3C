@@ -8,6 +8,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlTypes;
+using GNForm3C.DAL;
+using System.Web.Services;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEdit : System.Web.UI.Page
 {
@@ -21,6 +25,8 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
 
     protected void Page_Load(object sender, EventArgs e)
     {
+
+
         #region 11.1 Check User Login 
 
         if (Session["UserID"] == null)
@@ -37,8 +43,8 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
             #endregion 11.2 Fill Labels 
 
             #region 11.3 DropDown List Fill Section 
-
             FillDropDownList();
+
 
             #endregion 11.3 DropDown List Fill Section 
 
@@ -65,11 +71,13 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
             #endregion 11.6 Set Help Text 
 
         }
+
     }
 
     #endregion 11.0 Page Load Event
 
     #region 12.0 FillLabels 
+
 
     private void FillLabels(String FormName)
     {
@@ -81,11 +89,14 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
 
     private void FillDropDownList()
     {
-        CommonFillMethods.FillDropDownListTreatmentID(ddlTreatmentID);
         CommonFillMethods.FillDropDownListHospitalID(ddlHospitalID);
         CommonFillMethods.FillDropDownListFinYearID(ddlFinYearID);
         CommonFillMethods.FillDropDownListReceiptTypeID(ddlReceiptTypeID);
         CommonFillMethods.FillDropDownListPatientID(ddlPatientID);
+
+        ddlTreatmentID.Items.Clear();
+        ddlTreatmentID.Items.Insert(0, new ListItem("Select Treatment", "-99"));
+
     }
 
     #endregion 13.0 Fill DropDownList
@@ -159,9 +170,10 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
 
     #region 15.0 Save Button Event 
 
+    #region 15.1 Save Transaction
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        Page.Validate();
+        Page.Validate("vgTransaction");
         if (Page.IsValid)
         {
             try
@@ -172,7 +184,7 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
                 #region 15.1 Validate Fields 
 
                 String ErrorMsg = String.Empty;
-                if (ddlPatientID.Text.Trim() == String.Empty)
+                if (ddlPatientID.SelectedIndex == 0)
                     ErrorMsg += " - " + CommonMessage.ErrorRequiredField("Patient");
                 if (ddlTreatmentID.SelectedIndex == 0)
                     ErrorMsg += " - " + CommonMessage.ErrorRequiredFieldDDL("Treatment");
@@ -279,8 +291,10 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
                     {
                         if (balACC_GNTransaction.Insert(entACC_GNTransaction))
                         {
-                            ucMessage.ShowSuccess(CommonMessage.RecordSaved());
+                            ucMessage.ShowSuccess(CommonMessage.RecordSaved("Transaction"));
                             ClearControls();
+                            //ClearPatientControls();
+
                         }
                     }
                 }
@@ -291,9 +305,126 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
             catch (Exception ex)
             {
                 ucMessage.ShowError(ex.Message);
+
             }
+
+        }
+
+    }
+
+    #endregion 15.1 Save Transaction
+
+    #region  15.2 Save Patient
+
+    protected void btnSavePatient_Click(object sender, EventArgs e)
+    {
+        Page.Validate("vgPatient");
+        if (Page.IsValid)
+        {
+            try
+            {
+                ACC_GNTransactionBAL balACC_GNTransaction = new ACC_GNTransactionBAL();
+                MST_GNPatientENT entMST_Patient = new MST_GNPatientENT();
+
+                #region 15.1 Validate Fields 
+
+                String ErrorMsg = String.Empty;
+                if (txtPatientName.Text.Trim() == String.Empty)
+                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("Patient Name");
+                if (txtAge.Text.Trim() == String.Empty)
+                    ErrorMsg += " - " + CommonMessage.ErrorRequiredFieldDDL("Age");
+                if (txtMobileNo.Text.Trim() == String.Empty)
+                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("Mobile No");
+                if (dtpDOB.Text.Trim() == String.Empty)
+                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("DOB");
+
+                if (ErrorMsg != String.Empty)
+                {
+                    ErrorMsg = CommonMessage.ErrorPleaseCorrectFollowing() + ErrorMsg;
+                    ucMessage.ShowError(ErrorMsg);
+                    return;
+                }
+
+                #endregion 15.1 Validate Fields
+
+                #region 15.2 Gather Data 
+
+
+                if (txtPatientName.Text.Trim() != String.Empty)
+                    entMST_Patient.PatientName = txtPatientName.Text.Trim();
+
+                if (txtMobileNo.Text.Trim() != String.Empty)
+                    entMST_Patient.MobileNo = txtMobileNo.Text.Trim();
+
+                if (txtAge.Text.Trim() != String.Empty)
+                    entMST_Patient.Age = Convert.ToInt32(txtAge.Text.Trim());
+
+                if (dtpDOB.Text.Trim() != String.Empty)
+                    entMST_Patient.DOB = Convert.ToDateTime(dtpDOB.Text.Trim());
+
+                if (txtPrimaryDesc.Text.Trim() != String.Empty)
+                    entMST_Patient.PrimaryDesc = txtPrimaryDesc.Text.Trim();
+
+
+                entMST_Patient.UserID = Convert.ToInt32(Session["UserID"]);
+
+                entMST_Patient.Created = DateTime.Now;
+
+                entMST_Patient.Modified = DateTime.Now;
+
+
+                #endregion 15.2 Gather Data 
+
+
+                #region 15.3 Insert,Update,Copy 
+
+                if (Request.QueryString["PatientID"] != null && Request.QueryString["Copy"] == null)
+                {
+                    //entMST_Patient.PatientID = CommonFunctions.DecryptBase64Int32(Request.QueryString["PatientID"]);
+                    //if (balACC_GNTransaction.Update(entMST_Patient))
+                    //{
+                    //    Response.Redirect("ACC_GNTransactionList.aspx");
+                    //}
+                    //else
+                    //{
+                    //    ucMessage.ShowError(balACC_GNTransaction.Message);
+                    //}
+                }
+                else
+                {
+                    if (Request.QueryString["PatientID"] == null || Request.QueryString["Copy"] != null)
+                    {
+                        SqlInt32 InsertedPatientID = balACC_GNTransaction.InsertPatient(entMST_Patient);
+
+                        if (InsertedPatientID > 0)
+                        {
+                            ucMessage.ShowSuccess(CommonMessage.RecordSaved("Patient"));
+                            ClearPatientControls();
+
+                            CommonFillMethods.FillDropDownListPatientID(ddlPatientID);
+                            ddlPatientID.SelectedValue = InsertedPatientID.ToString();
+                            ucPatient.ShowPatient(Convert.ToInt32(InsertedPatientID.ToString()));
+
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "MasterPageView", "toggleAddPatientForm()", true);
+
+
+                        }
+                    }
+                }
+
+                #endregion 15.3 Insert,Update,Copy
+
+            }
+            catch (Exception ex)
+            {
+                ucMessage.ShowError(ex.Message);
+
+            }
+
+
         }
     }
+    #endregion  15.2 Save Patient
 
     #endregion 15.0 Save Button Event 
 
@@ -319,162 +450,49 @@ public partial class AdminPanel_Account_ACC_GNTransaction_ACC_GNTransactionAddEd
         ddlPatientID.Focus();
     }
 
+
+    private void ClearPatientControls()
+    {
+        txtPatientName.Text = String.Empty;
+        txtAge.Text = String.Empty;
+        txtMobileNo.Text = String.Empty;
+        txtPrimaryDesc.Text = String.Empty;
+        dtpDOB.Text = String.Empty;
+    }
+
     #endregion 16.0 Clear Controls 
 
-    #region 18.0 Fill Finyear Dropdown From Hopital
-    protected void ddlHospitalID_SelectedIndexChanged(object sender, EventArgs e)
-    {
+    #region 17.0 FillTreatmentCombobox
 
+    protected void FillTreatmentCombobox(object sender, EventArgs e)
+    {
         if (ddlHospitalID.SelectedIndex > 0)
         {
             SqlInt32 HospitalID = SqlInt32.Null;
+
             HospitalID = Convert.ToInt32(ddlHospitalID.SelectedValue);
             CommonFillMethods.FillDropDownListTreatmentIDByHospitalID(ddlTreatmentID, HospitalID);
-
         }
         else
         {
-            ddlFinYearID.Items.Clear();
-            ddlFinYearID.Items.Insert(0, new ListItem("Select Fin Year", "-99"));
+            ddlTreatmentID.Items.Clear();
+            ddlTreatmentID.Items.Insert(0, new ListItem("Select Treatment", "-99"));
         }
+
     }
-
-    #endregion 18.0 Fill Finyear Dropdown From Hopital
-
-    [System.Web.Services.WebMethod]
-    public static string SavePatient(string patientName, int age, DateTime dob, string mobileNo, string primaryDesc)
+    #endregion 17.0 FillTreatmentCombobox
+    protected void FillPatientView(object sender, EventArgs e)
     {
-        try
+        int PatientID = 0;
+
+
+        if (int.TryParse(ddlPatientID.SelectedValue, out PatientID))
         {
-            ACC_GNTransactionBAL balACC_GNTransaction = new ACC_GNTransactionBAL();
-            MST_GNPatientENT entMST_GNPatient = new MST_GNPatientENT();
-
-            // Validate and gather data
-            entMST_GNPatient.PatientName = patientName;
-            entMST_GNPatient.Age = age;
-            entMST_GNPatient.DOB = dob;
-            entMST_GNPatient.MobileNo = mobileNo;
-            entMST_GNPatient.PrimaryDesc = primaryDesc;
-
-            // Assume UserID and other properties are set as needed
-            entMST_GNPatient.UserID = HttpContext.Current.Session["UserID"] != null
-                ? Convert.ToInt32(HttpContext.Current.Session["UserID"])
-                : 0;
-
-            entMST_GNPatient.Created = DateTime.Now;
-            entMST_GNPatient.Modified = DateTime.Now;
-
-            if (balACC_GNTransaction.InsertPatient(entMST_GNPatient))
+            if (PatientID > 0)
             {
-                return "Success";
+                ucPatient.ShowPatient(PatientID);
             }
-            else
-            {
-                return balACC_GNTransaction.Message;
-            }
-        }
-        catch (Exception ex)
-        {
-            return "Error: " + ex.Message;
         }
     }
 
-    protected void btnSave_ClickPatient(object sender, EventArgs e)
-    {
-        Page.Validate();
-        if (!Page.IsValid)
-        {
-            try
-            {
-                ACC_GNTransactionBAL balACC_GNTransaction = new ACC_GNTransactionBAL();
-                MST_GNPatientENT entMST_GNPatient = new MST_GNPatientENT();
-
-                #region 15.1 Validate Fields 
-
-                String ErrorMsg = String.Empty;
-
-                if (txtPatientName.Text.Trim() == String.Empty)
-                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("txtPatientName");
-                if (txtAge.Text.Trim() == String.Empty)
-                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("txtAge");
-                if (dtpDOB.Text.Trim() == String.Empty)
-                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("dtpDOB");
-                if (txtMobileNo.Text.Trim() == String.Empty)
-                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("txtMobileNo");
-                if (txtPrimaryDesc.Text.Trim() == String.Empty)
-                    ErrorMsg += " - " + CommonMessage.ErrorRequiredField("txtPrimaryDesc");
-
-                if (ErrorMsg != String.Empty)
-                {
-                    ErrorMsg = CommonMessage.ErrorPleaseCorrectFollowing() + ErrorMsg;
-                    ucMessage.ShowError(ErrorMsg);
-                    return;
-                }
-
-                #endregion 15.1 Validate Fields
-
-                #region 15.2 Gather Data 
-
-
-                if (txtPatientName.Text.Trim() != String.Empty)
-                    entMST_GNPatient.PatientName = txtPatientName.Text.Trim();
-
-                if (txtAge.Text.Trim() != String.Empty)
-                    entMST_GNPatient.Age = Convert.ToInt32(txtAge.Text.Trim());
-
-                if (dtpDOB.Text.Trim() != String.Empty)
-                    entMST_GNPatient.DOB = Convert.ToDateTime(dtpDOB.Text.Trim());
-
-                if (txtMobileNo.Text.Trim() != String.Empty)
-                    entMST_GNPatient.MobileNo = txtMobileNo.Text.Trim();
-
-                if (txtPrimaryDesc.Text.Trim() != String.Empty)
-                    entMST_GNPatient.PrimaryDesc = txtPrimaryDesc.Text.Trim();
-
-
-                entMST_GNPatient.UserID = Convert.ToInt32(Session["UserID"]);
-
-                entMST_GNPatient.Created = DateTime.Now;
-
-                entMST_GNPatient.Modified = DateTime.Now;
-
-
-                #endregion 15.2 Gather Data 
-
-
-                #region 15.3 Insert,Update,Copy 
-
-                if (Request.QueryString["PatientID"] != null && Request.QueryString["Copy"] == null)
-                {
-                    entMST_GNPatient.PatientID = CommonFunctions.DecryptBase64Int32(Request.QueryString["PatientID"]);
-                    if (balACC_GNTransaction.InsertPatient(entMST_GNPatient))
-                    {
-                        Response.Redirect("ACC_GNTransactionList.aspx");
-                    }
-                    else
-                    {
-                        ucMessage.ShowError(balACC_GNTransaction.Message);
-                    }
-                }
-                else
-                {
-                    if (Request.QueryString["PatientID"] == null || Request.QueryString["Copy"] != null)
-                    {
-                        if (balACC_GNTransaction.InsertPatient(entMST_GNPatient))
-                        {
-                            ucMessage.ShowSuccess(CommonMessage.RecordSaved());
-                            ClearControls();
-                        }
-                    }
-                }
-
-                #endregion 15.3 Insert,Update,Copy
-
-            }
-            catch (Exception ex)
-            {
-                ucMessage.ShowError(ex.Message);
-            }
-        }
-    }
 }

@@ -179,19 +179,22 @@ namespace GNForm3C.BAL
             }
         }
 
-        public Boolean InsertPatient(MST_GNPatientENT entMST_Patient)
+        public SqlInt32 InsertPatient(MST_GNPatientENT entMST_Patient)
         {
-            ACC_GNTransactionDAL dalACC_GNTransaction = new ACC_GNTransactionDAL();
-            if (dalACC_GNTransaction.InsertPatient(entMST_Patient))
+            MST_PatientDAL dalMST_Patient = new MST_PatientDAL();
+            SqlInt32 PatientID = dalMST_Patient.InsertPatient(entMST_Patient);
+
+            if (PatientID > 0)
             {
-                return true;
+                return PatientID;
             }
             else
             {
-                this.Message = dalACC_GNTransaction.Message;
-                return false;
+                this.Message = dalMST_Patient.Message;
+                return PatientID;
             }
         }
+
 
     }
 

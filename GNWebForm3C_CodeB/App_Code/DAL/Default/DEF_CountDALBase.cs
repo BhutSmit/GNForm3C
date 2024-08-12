@@ -46,7 +46,7 @@ namespace GNForm3C.DAL
                 SqlDatabase sqlDB = new SqlDatabase(myConnectionString);
                 DbCommand dbCMD = sqlDB.GetStoredProcCommand("PR_DSB_Count");
 
-                    DataTable dtCount = new DataTable("PR_DSB_Count");
+                        DataTable dtCount = new DataTable("PR_DSB_Count");
 
                 DataBaseHelper DBH = new DataBaseHelper();
                 DBH.LoadDataTable(sqlDB, dbCMD, dtCount);

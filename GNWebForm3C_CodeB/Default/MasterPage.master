@@ -287,6 +287,12 @@
                                         </a>
 
                                     </li>
+                                    <li class="nav-item start ">
+                                        <a href='<%=ResolveClientUrl("~/AdminPanel/MST_DSB2.aspx") %>' class="kt-menu__link ">
+                                            <i class="kt-menu__link-icon flaticon2-architecture-and-city"></i>
+                                            <span class="kt-menu__link-text">Dashboard3</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="heading">
@@ -385,7 +391,7 @@
                                     </li>
                                     <li class="nav-item  ">
                                         <a href='<%=ResolveClientUrl("~/AdminPanel/Account/ACC_GNTransaction/ACC_GNTransaction.aspx") %>' class="nav-link ">
-                                            <span class="title">Transaction</span>
+                                            <span class="title">GNTransaction</span>
                                         </a>
                                     </li>
                                 </ul>

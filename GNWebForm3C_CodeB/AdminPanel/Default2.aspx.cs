@@ -12,6 +12,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text.Json;
 using System.Web.Script.Serialization;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 public partial class AdminPanel_Default2 : System.Web.UI.Page
 {
@@ -21,6 +23,12 @@ public partial class AdminPanel_Default2 : System.Web.UI.Page
     static Int32 PageRecordSize = CV.PageRecordSize;//Size of record per page
 
     #endregion variable
+
+    #region Datatable
+
+    DataTable dtglobal = new DataTable();
+
+    #endregion
 
     private SqlInt32 HospitalID = SqlInt32.Null;
 
@@ -124,6 +132,19 @@ public partial class AdminPanel_Default2 : System.Web.UI.Page
 
         ACC_IncomeBAL bal_ACC_Income = new ACC_IncomeBAL();
         DataTable dt_ACC_Income = bal_ACC_Income.SelectByHospital(HospitalID);
+        //dtglobal = dt_ACC_Income;
+
+        DataTable incomeSummary = SummarizeDataByMonth(dt_ACC_Income, "IncomeDate", "Amount", "TotalIncome");
+
+        //Convert income summary to JSON format
+        var result = new
+        {
+            labels = incomeSummary.AsEnumerable().Select(row => row.Field<string>("Month")).ToArray(),
+            values = incomeSummary.AsEnumerable().Select(row => row.Field<decimal>("TotalIncome")).ToArray()
+        };
+
+        //Execute createCharts function with incomeData
+        Page.ClientScript.RegisterStartupScript(this.GetType(), "IncomeChart", "IncomeChart(" + new JavaScriptSerializer().Serialize(result) + ");", true);
 
 
         if (dt_ACC_Income.Rows.Count > 0)
